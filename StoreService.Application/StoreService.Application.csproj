@@ -18,9 +18,6 @@
     <Folder Include="Pedidos\DTOs\" />
     <Folder Include="Pedidos\Interfaces\" />
     <Folder Include="Pedidos\UseCases\" />
-    <Folder Include="Estoque\DTOs\" />
-    <Folder Include="Estoque\Interfaces\" />
-    <Folder Include="Estoque\UseCases\" />
   </ItemGroup>
 
 </Project>

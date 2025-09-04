@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using SportsStoreService.Data;
 using SportsStoreService.Extensions;
@@ -11,8 +10,7 @@ namespace SportsStoreService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.ConfigurePersistence(builder.Configuration);
-            builder.Services.ConfigureProducts();
+            builder.Services.AddSportsStore(builder.Configuration);
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +24,7 @@ namespace SportsStoreService
                 app.UseSwaggerUI();
             }
 
+            app.UseSportsStore();
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
