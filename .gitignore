@@ -361,3 +361,30 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ---- IDEs & ferramentas ----
+.vscode/
+.idea/
+*.sln.iml
+
+# ---- SO / arquivos de sistema ----
+.DS_Store
+Thumbs.db
+
+# ---- Testes (além do padrão) ----
+TestResults/
+
+# ---- Segredos/variáveis locais (NÃO versionar) ----
+*.local.json
+*.secret.json
+*.Secrets.json
+*.Private.json
+.env
+.env.*
+
+# Se usar variações locais de appsettings
+appsettings.*.Local.json
+
+# ---- Front-end / build de SPA (se houver) ----
+dist/
+coverage/
