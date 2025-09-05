@@ -13,6 +13,9 @@ using StoreService.Application.Products.UseCases;
 using StoreService.Application.Pedidos.Interfaces;
 using StoreService.Application.Pedidos.UseCases;
 using SportsStoreService.Middlewares;
+using StoreService.Application.Users.UseCases;
+using StoreService.Application.Security;
+using StoreService.Domain.Repositories;
 
 namespace SportsStoreService.Extensions
 {
@@ -29,6 +32,8 @@ namespace SportsStoreService.Extensions
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IEstoqueRepository, EstoqueRepository>();
             services.AddScoped<IPedidoRepository, PedidoRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 
             // UseCases - Produtos
             services.AddScoped<CriarProdutoUseCase>();
@@ -45,6 +50,13 @@ namespace SportsStoreService.Extensions
             services.AddScoped<CriarPedidoComItensUseCase>();
             services.AddScoped<ObterPedidoPorIdUseCase>();
             services.AddScoped<ConfirmarPedidoUseCase>();
+
+            // UseCases - Usuarios
+            services.AddScoped<CriarUsuarioUseCase>();
+            services.AddScoped<AtualizarUsuarioUseCase>();
+            services.AddScoped<ExcluirUsuarioUseCase>();
+            services.AddScoped<ObterUsuarioPorIdUseCase>();
+            services.AddScoped<ListarUsuariosUseCase>();
 
             // Controllers + FluentValidation
             services.AddControllers();
