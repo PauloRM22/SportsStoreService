@@ -16,6 +16,7 @@ using SportsStoreService.Middlewares;
 using StoreService.Application.Users.UseCases;
 using StoreService.Application.Security;
 using StoreService.Domain.Repositories;
+using StoreService.Application.Auth.UseCases;
 
 namespace SportsStoreService.Extensions
 {
@@ -70,6 +71,10 @@ namespace SportsStoreService.Extensions
             // Swagger
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            // Token + Login
+            services.AddSingleton<ITokenService, TokenService>();
+            services.AddScoped<LoginUseCase>();
 
             return services;
         }
