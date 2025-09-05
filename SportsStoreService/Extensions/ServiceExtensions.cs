@@ -10,6 +10,9 @@ using StoreService.Application.Estoque.Interfaces;
 using StoreService.Application.Estoque.UseCases;
 using StoreService.Application.Products.Interfaces;
 using StoreService.Application.Products.UseCases;
+using StoreService.Application.Pedidos.Interfaces;
+using StoreService.Application.Pedidos.UseCases;
+using SportsStoreService.Middlewares;
 
 namespace SportsStoreService.Extensions
 {
@@ -25,6 +28,7 @@ namespace SportsStoreService.Extensions
             // Repositórios
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IEstoqueRepository, EstoqueRepository>();
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
 
             // UseCases - Produtos
             services.AddScoped<CriarProdutoUseCase>();
@@ -36,6 +40,11 @@ namespace SportsStoreService.Extensions
             // UseCases - Estoque
             services.AddScoped<RegistrarEntradaEstoqueUseCase>();
             services.AddScoped<ConsultarSaldoProdutoUseCase>();
+
+            // UseCases - Pedidos
+            services.AddScoped<CriarPedidoComItensUseCase>();
+            services.AddScoped<ObterPedidoPorIdUseCase>();
+            services.AddScoped<ConfirmarPedidoUseCase>();
 
             // Controllers + FluentValidation
             services.AddControllers();
@@ -63,6 +72,7 @@ namespace SportsStoreService.Extensions
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthorization();
             app.MapControllers();
 

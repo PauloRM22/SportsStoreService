@@ -14,10 +14,4 @@
     <ProjectReference Include="..\StoreService.Domain\StoreService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pedidos\DTOs\" />
-    <Folder Include="Pedidos\Interfaces\" />
-    <Folder Include="Pedidos\UseCases\" />
-  </ItemGroup>
-
 </Project>

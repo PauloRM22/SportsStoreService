@@ -28,8 +28,4 @@
     <ProjectReference Include="..\StoreService.Domain\StoreService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Middlewares\" />
-  </ItemGroup>
-
 </Project>
