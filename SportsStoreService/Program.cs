@@ -1,12 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.IdentityModel.Tokens;         // <ó garante este using
-using Microsoft.OpenApi.Models;
-using SportsStoreService.Extensions;
-using StoreService.Application.Security;
-using System.Text;                            // <ó se usar Encoding.UTF8
-using System.Text.Json;
+Ôªøusing SportsStoreService.Extensions;
 
 namespace SportsStoreService
 {
@@ -16,113 +8,15 @@ namespace SportsStoreService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // JWT options
-            var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>() ?? new JwtOptions();
-            if (string.IsNullOrWhiteSpace(jwtOptions.Key) ||
-                string.IsNullOrWhiteSpace(jwtOptions.Issuer) ||
-                string.IsNullOrWhiteSpace(jwtOptions.Audience))
-            {
-                throw new InvalidOperationException("ConfiguraÁ„o JWT inv·lida. Verifique appsettings.json (Jwt:Key, Jwt:Issuer, Jwt:Audience).");
-            }
-
-            // DI do projeto
+            // Infra do projeto (DB, EF, repos, etc.)
             builder.Services.AddSportsStore(builder.Configuration);
 
-            // Auth por padr„o em todos os endpoints
-            builder.Services.AddControllers(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });
+            // Controllers
+            builder.Services.AddControllers();
 
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SportsStoreService", Version = "v1" });
-
-                var jwtSecurityScheme = new OpenApiSecurityScheme
-                {
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Description = "Informe: Bearer {seu token}",
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-
-                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() }
-                });
-            });
-
-            // AuthN/AuthZ + mensagens amig·veis
-            builder.Services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidateAudience = true,
-                        ValidAudience = jwtOptions.Audience,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromSeconds(30)
-                    };
-
-                    // ?? Fica DENTRO do AddJwtBearer
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnChallenge = context =>
-                        {
-                            context.HandleResponse();
-                            if (!context.Response.HasStarted)
-                            {
-                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                                context.Response.ContentType = "application/json";
-
-                                var payload = JsonSerializer.Serialize(new
-                                {
-                                    error = "UNAUTHORIZED",
-                                    message = "Token ausente ou inv·lido. FaÁa login e envie o cabeÁalho: Authorization: Bearer {token}."
-                                });
-
-                                return context.Response.WriteAsync(payload);
-                            }
-                            return Task.CompletedTask;
-                        },
-                        OnForbidden = context =>
-                        {
-                            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                            context.Response.ContentType = "application/json";
-
-                            var payload = JsonSerializer.Serialize(new
-                            {
-                                error = "FORBIDDEN",
-                                message = "VocÍ n„o tem permiss„o para acessar este recurso."
-                            });
-
-                            return context.Response.WriteAsync(payload);
-                        }
-                    };
-                });
-
-            builder.Services.AddAuthorization();
-
-            // Registros auxiliares
-            builder.Services.AddSingleton(jwtOptions);
-            builder.Services.AddSingleton<ITokenService, TokenService>();
+            // Swagger com esquema Bearer + Autentica√ß√£o/Autoriza√ß√£o via JWT (policies Admin/Vendedor)
+            builder.Services.AddSwaggerWithJwt();
+            builder.Services.AddJwtAuth(builder.Configuration);
 
             var app = builder.Build();
 
@@ -133,11 +27,9 @@ namespace SportsStoreService
             }
 
             app.UseHttpsRedirection();
-            app.UseSportsStore();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-
             app.Run();
         }
     }

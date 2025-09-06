@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StoreService.Application.Products.DTOs;
 using StoreService.Application.Products.UseCases;
 
@@ -6,6 +7,7 @@ namespace SportsStoreService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "AdminOnly")]
     public class ProdutoController : ControllerBase
     {
         [HttpGet]

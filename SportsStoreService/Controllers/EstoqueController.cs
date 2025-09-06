@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StoreService.Application.Estoque.DTOs;
 using StoreService.Application.Estoque.UseCases;
 
@@ -6,6 +7,7 @@ namespace SportsStoreService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "AdminOnly")]
     public class EstoqueController : ControllerBase
     {
         [HttpPost("entrada")]

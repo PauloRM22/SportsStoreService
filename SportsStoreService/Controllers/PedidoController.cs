@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StoreService.Application.Pedidos.DTOs;
 using StoreService.Application.Pedidos.UseCases;
 
@@ -6,6 +7,7 @@ namespace SportsStoreService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "VendedorOnly")]
     public class PedidoController : ControllerBase
     {
         [HttpPost]
