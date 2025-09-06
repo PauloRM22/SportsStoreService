@@ -11,14 +11,7 @@ namespace StoreService.Application.Pedidos.UseCases
         public CriarPedidoComItensUseCase(IPedidoRepository repo) => _repo = repo;
 
         public async Task<PedidoResponse> ExecuteAsync(CreatePedidoRequest input, CancellationToken ct = default)
-        {
-            if (string.IsNullOrWhiteSpace(input.ClienteDocumento))
-                throw new ArgumentException("ClienteDocumento é obrigatório.");
-            if (string.IsNullOrWhiteSpace(input.VendedorNome))
-                throw new ArgumentException("VendedorNome é obrigatório.");
-            if (input.Itens == null || input.Itens.Count == 0)
-                throw new ArgumentException("Informe ao menos um item.");
-
+        { 
             var pedido = new Pedido
             {
                 Id = Guid.NewGuid(),

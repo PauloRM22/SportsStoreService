@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportsStoreService.Data;
+using StoreService.Application.Users.Interfaces;
 using StoreService.Domain.Entities;
-using StoreService.Domain.Repositories;
 
 namespace SportsStoreService.Data.Repositories
 {

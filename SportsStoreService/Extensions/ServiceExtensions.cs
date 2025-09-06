@@ -1,22 +1,24 @@
-﻿using FluentValidation.AspNetCore;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using FluentValidation;
 using SportsStoreService.Data;
 using SportsStoreService.Data.repositories;
 using SportsStoreService.Data.Repositories;
+using SportsStoreService.Middlewares;
 using SportsStoreService.Validations.Estoque;
+using SportsStoreService.Validations.Pedidos;
 using SportsStoreService.Validations.Produtos;
+using SportsStoreService.Validations.Usuarios;
+using StoreService.Application.Auth.UseCases;
 using StoreService.Application.Estoque.Interfaces;
 using StoreService.Application.Estoque.UseCases;
-using StoreService.Application.Products.Interfaces;
-using StoreService.Application.Products.UseCases;
 using StoreService.Application.Pedidos.Interfaces;
 using StoreService.Application.Pedidos.UseCases;
-using SportsStoreService.Middlewares;
-using StoreService.Application.Users.UseCases;
+using StoreService.Application.Products.Interfaces;
+using StoreService.Application.Products.UseCases;
 using StoreService.Application.Security;
-using StoreService.Domain.Repositories;
-using StoreService.Application.Auth.UseCases;
+using StoreService.Application.Users.UseCases;
+using StoreService.Application.Users.Interfaces;
 
 namespace SportsStoreService.Extensions
 {
@@ -67,6 +69,8 @@ namespace SportsStoreService.Extensions
             // Registro dos validators (quantos precisar)
             services.AddValidatorsFromAssemblyContaining<CreateProdutoRequestValidator>();
             services.AddValidatorsFromAssemblyContaining<CreateEntradaEstoqueRequestValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateUsuarioRequestValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreatePedidoRequestValidator>();
 
             // Swagger
             services.AddEndpointsApiExplorer();

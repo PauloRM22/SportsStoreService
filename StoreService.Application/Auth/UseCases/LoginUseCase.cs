@@ -1,6 +1,6 @@
 ﻿using StoreService.Application.Auth.DTOs;
 using StoreService.Application.Security;
-using StoreService.Domain.Repositories;
+using StoreService.Application.Users.Interfaces;
 
 namespace StoreService.Application.Auth.UseCases
 {

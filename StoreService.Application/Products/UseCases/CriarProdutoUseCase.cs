@@ -11,9 +11,6 @@ namespace StoreService.Application.Products.UseCases
 
         public async Task<ProdutoResponse> ExecuteAsync(CreateProdutoRequest input, CancellationToken ct = default)
         {
-            if (await _repo.ExistsByNomeAsync(input.Nome, null, ct))
-                throw new ArgumentException($"Já existe um produto com o nome '{input.Nome}'.");
-
             var entity = new Produto
             {
                 Id = Guid.NewGuid(),

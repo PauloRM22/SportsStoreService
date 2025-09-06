@@ -1,6 +1,6 @@
 ﻿using StoreService.Domain.Entities;
 
-namespace StoreService.Domain.Repositories
+namespace StoreService.Application.Users.Interfaces
 {
     public interface IUsuarioRepository
     {

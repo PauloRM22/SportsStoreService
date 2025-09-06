@@ -1,6 +1,6 @@
 ﻿using StoreService.Application.Users;
 using StoreService.Application.Users.DTOs;
-using StoreService.Domain.Repositories;
+using StoreService.Application.Users.Interfaces;
 
 namespace StoreService.Application.Users.UseCases
 {
