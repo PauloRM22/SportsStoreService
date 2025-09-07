@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.Net.Mail;
-using StoreService.Application.Users.DTOs;
-using StoreService.Domain.Enums; // <-- add
+using StoreService.Domain.Enums;
+using StoreService.Application.Usuarios.DTOs; // <-- add
 
 namespace StoreService.Application.Validations.Usuarios
 {

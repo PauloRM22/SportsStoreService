@@ -9,12 +9,12 @@ using StoreService.Infrastructure.Data.Repositories;     // ProdutoRepository, e
 // Interfaces (Application)
 using StoreService.Application.Estoque.Interfaces;
 using StoreService.Application.Pedidos.Interfaces;
-using StoreService.Application.Users.Interfaces;
 
 // JWT (contrato na Application, implementação na Infrastructure)
 using StoreService.Application.Security;
 using StoreService.Infrastructure.Security;
 using StoreService.Application.Produtos.Interfaces;
+using StoreService.Application.Usuarios.Interfaces;
 
 namespace StoreService.Infrastructure.DependencyInjection
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using StoreService.Application.Users.DTOs;
-using StoreService.Application.Users.UseCases;
+using StoreService.Application.Usuarios.DTOs;
+using StoreService.Application.Usuarios.UseCases;
 
 namespace SportsStoreService.Controllers
 {

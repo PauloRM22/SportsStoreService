@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using System.Net.Mail;
-using StoreService.Application.Users.DTOs;
+using StoreService.Application.Usuarios.DTOs;
 
 namespace StoreService.Application.Validations.Usuarios
 {

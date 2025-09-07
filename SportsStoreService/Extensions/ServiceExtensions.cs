@@ -7,7 +7,8 @@ using StoreService.Application.Estoque.UseCases;
 using StoreService.Application.Pedidos.UseCases;
 using StoreService.Application.Produtos.UseCases;
 using StoreService.Application.Security;
-using StoreService.Application.Users.UseCases;
+using StoreService.Application.Usuarios.UseCases;
+
 
 // Ponto de ancoragem para varredura de validators (qualquer classe da Application)
 using StoreService.Application.Validations.Produtos;

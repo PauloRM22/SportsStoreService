@@ -1,9 +1,9 @@
 ﻿using StoreService.Application.Security;
-using StoreService.Application.Users.DTOs;
-using StoreService.Application.Users.Interfaces;
+using StoreService.Application.Usuarios.DTOs;
+using StoreService.Application.Usuarios.Interfaces;
 using StoreService.Domain.Entities;
 
-namespace StoreService.Application.Users.UseCases
+namespace StoreService.Application.Usuarios.UseCases
 {
     public class CriarUsuarioUseCase
     {

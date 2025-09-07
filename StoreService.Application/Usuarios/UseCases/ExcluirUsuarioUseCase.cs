@@ -1,6 +1,6 @@
-﻿using StoreService.Application.Users.Interfaces;
+﻿using StoreService.Application.Usuarios.Interfaces;
 
-namespace StoreService.Application.Users.UseCases
+namespace StoreService.Application.Usuarios.UseCases
 {
     public class ExcluirUsuarioUseCase
     {

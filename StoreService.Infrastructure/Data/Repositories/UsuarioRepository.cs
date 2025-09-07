@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StoreService.Application.Users.Interfaces;
+using StoreService.Application.Usuarios.Interfaces;
 using StoreService.Domain.Entities;
 
 namespace StoreService.Infrastructure.Data.Repositories

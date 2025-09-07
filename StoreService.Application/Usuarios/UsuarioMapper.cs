@@ -1,7 +1,7 @@
-﻿using StoreService.Application.Users.DTOs;
+﻿using StoreService.Application.Usuarios.DTOs;
 using StoreService.Domain.Entities;
 
-namespace StoreService.Application.Users
+namespace StoreService.Application.Usuarios
 {
     public static class UsuarioMapper
     {
