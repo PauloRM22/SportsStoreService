@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using StoreService.Application.Security;
+using StoreService.Infrastructure.Security;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json; // <- para serializar o JSON de erro

@@ -1,41 +1,37 @@
 ﻿using StoreService.Application.Pedidos.DTOs;
 using StoreService.Application.Pedidos.Interfaces;
 using StoreService.Domain.Entities;
-using StoreService.Domain.Enums;
 
 namespace StoreService.Application.Pedidos.UseCases
 {
     public class CriarPedidoComItensUseCase
     {
         private readonly IPedidoRepository _repo;
+
         public CriarPedidoComItensUseCase(IPedidoRepository repo) => _repo = repo;
 
-        public async Task<PedidoResponse> ExecuteAsync(CreatePedidoRequest input, CancellationToken ct = default)
-        { 
+        public async Task<PedidoResponse> ExecuteAsync(CreatePedidoRequest request, Guid vendedorId, CancellationToken ct)
+        {
+            if (request is null) throw new ArgumentNullException(nameof(request));
+
             var pedido = new Pedido
             {
                 Id = Guid.NewGuid(),
-                ClienteDocumento = input.ClienteDocumento.Trim(),
-                VendedorNome = input.VendedorNome.Trim(),
-                ValorTotal = 0,
-                Status = StatusPedido.Rascunho,
+                ClienteDocumento = request.ClienteDocumento?.Trim() ?? string.Empty,
+                VendedorId = vendedorId,
+                VendedorNome = request.VendedorNome?.Trim() ?? string.Empty,
                 CriadoEm = DateTime.UtcNow
             };
 
-            var itens = input.Itens
-                .GroupBy(i => i.ProdutoId)
-                .Select(g => new PedidoItem
-                {
-                    Id = Guid.NewGuid(),
-                    PedidoId = pedido.Id,
-                    ProdutoId = g.Key,
-                    Quantidade = g.Sum(x => x.Quantidade), // consolida duplicados
-                    PrecoUnitario = 0 // será preenchido no repo a partir do Produto.Preco
-                })
-                .ToList();
+            var itens = request.Itens.Select(i => new PedidoItem
+            {
+                Id = Guid.NewGuid(),
+                ProdutoId = i.ProdutoId,
+                Quantidade = i.Quantidade
+            }).ToList();
 
-            pedido = await _repo.CriarComItensAsync(pedido, itens, ct);
-            return Map(pedido);
+            var criado = await _repo.CriarComItensAsync(pedido, itens, ct);
+            return Map(criado);
         }
 
         private static PedidoResponse Map(Pedido p) => new()
@@ -43,6 +39,7 @@ namespace StoreService.Application.Pedidos.UseCases
             Id = p.Id,
             Codigo = p.Codigo,
             ClienteDocumento = p.ClienteDocumento,
+            VendedorId = p.VendedorId,          // ✅ vai casar com Guid? no DTO
             VendedorNome = p.VendedorNome,
             ValorTotal = p.ValorTotal,
             Status = p.Status,
@@ -50,11 +47,12 @@ namespace StoreService.Application.Pedidos.UseCases
             AtualizadoEm = p.AtualizadoEm,
             Itens = p.Itens.Select(i => new PedidoItemResponse
             {
+                Id = i.Id,
                 ProdutoId = i.ProdutoId,
-                ProdutoCodigo = 0, // preenchido no GET por id (repo vai incluir Produto)
+                ProdutoCodigo = i.Produto?.Codigo ?? 0,    // ✅ vem do Include feito no repo
                 Quantidade = i.Quantidade,
                 PrecoUnitario = i.PrecoUnitario,
-                Subtotal = i.Subtotal
+                Subtotal = i.Quantidade * i.PrecoUnitario  // ✅
             }).ToList()
         };
     }

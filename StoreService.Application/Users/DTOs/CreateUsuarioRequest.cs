@@ -1,4 +1,5 @@
 ﻿using StoreService.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace StoreService.Application.Users.DTOs
 {
@@ -7,6 +8,8 @@ namespace StoreService.Application.Users.DTOs
         public string Nome { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty; // só entra aqui, nunca sai
+        
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public TipoUsuario TipoUsuario { get; set; }
     }
 }

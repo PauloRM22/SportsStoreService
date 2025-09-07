@@ -1,4 +1,6 @@
-﻿using SportsStoreService.Extensions;
+﻿using SportsStoreService.Extensions;                   // AddSportsStore, AddSwaggerWithJwt, AddJwtAuth
+using SportsStoreService.Middlewares;
+using StoreService.Infrastructure.DependencyInjection;                  // ExceptionMiddleware  (ajuste se o namespace for outro)
 
 namespace SportsStoreService
 {
@@ -8,28 +10,41 @@ namespace SportsStoreService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Infra do projeto (DB, EF, repos, etc.)
+            // 1) Serviços da aplicação (use cases, etc.)
             builder.Services.AddSportsStore(builder.Configuration);
 
-            // Controllers
-            builder.Services.AddControllers();
+            // 2) Infraestrutura (DbContext + Repositórios)
+            builder.Services.AddInfrastructure(builder.Configuration);
 
-            // Swagger com esquema Bearer + Autenticação/Autorização via JWT (policies Admin/Vendedor)
+            // 4) Swagger + JWT (esquema de segurança e auth)
             builder.Services.AddSwaggerWithJwt();
             builder.Services.AddJwtAuth(builder.Configuration);
 
             var app = builder.Build();
 
+            // 5) Swagger só em Development (mantenho seu comportamento atual)
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
+            // 6) Middleware global de exceções (ProblemDetails)
+            //    Coloque ANTES de Authentication/Authorization para capturar tudo
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseHttpsRedirection();
+
+            // 7) Auth
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // 8) Endpoints
             app.MapControllers();
+
+            // (Opcional) Atalho para abrir o Swagger na raiz.
+            // app.MapGet("/", () => Results.Redirect("/swagger"));
+
             app.Run();
         }
     }

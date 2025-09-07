@@ -1,103 +1,72 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
-using SportsStoreService.Data;
-using SportsStoreService.Data.repositories;
-using SportsStoreService.Data.Repositories;
-using SportsStoreService.Middlewares;
-using SportsStoreService.Validations.Estoque;
-using SportsStoreService.Validations.Pedidos;
-using SportsStoreService.Validations.Produtos;
-using SportsStoreService.Validations.Usuarios;
+
+// Application (DTOs/UseCases/Validators/Segurança)
 using StoreService.Application.Auth.UseCases;
-using StoreService.Application.Estoque.Interfaces;
 using StoreService.Application.Estoque.UseCases;
-using StoreService.Application.Pedidos.Interfaces;
 using StoreService.Application.Pedidos.UseCases;
-using StoreService.Application.Products.Interfaces;
-using StoreService.Application.Products.UseCases;
+using StoreService.Application.Produtos.UseCases;
 using StoreService.Application.Security;
 using StoreService.Application.Users.UseCases;
-using StoreService.Application.Users.Interfaces;
+
+// Ponto de ancoragem para varredura de validators (qualquer classe da Application)
+using StoreService.Application.Validations.Produtos;
+using StoreService.Infrastructure.Security;
+using System.Text.Json.Serialization;
 
 namespace SportsStoreService.Extensions
 {
     public static class ServiceExtensions
     {
-        // Registra TUDO que a app precisa (DbContext, repos, use cases, controllers, swagger, validators)
         public static IServiceCollection AddSportsStore(this IServiceCollection services, IConfiguration configuration)
         {
-            // DbContext
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("Default")));
+            // MVC + FluentValidation (sem ModelStateFilter custom)
+            services
+                .AddControllers()
+                .AddJsonOptions(o =>
+                {
+                    // aceitar/enviar enums como string: "Administrador", "Vendedor"
+                    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+                });
+            services.AddFluentValidationAutoValidation();
 
-            // Repositórios
-            services.AddScoped<IProdutoRepository, ProdutoRepository>();
-            services.AddScoped<IEstoqueRepository, EstoqueRepository>();
-            services.AddScoped<IPedidoRepository, PedidoRepository>();
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            // Varredura de VALIDATORS na ASSEMBLY da Application
+            services.AddValidatorsFromAssembly(typeof(CreateProdutoRequestValidator).Assembly);
+
+            // Segurança (hash de senha) – implementação simples pode ficar na Application
             services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 
-            // UseCases - Produtos
-            services.AddScoped<CriarProdutoUseCase>();
-            services.AddScoped<AtualizarProdutoUseCase>();
+            // TokenService: se quiser ser 100% purista, mova a implementação p/ Infrastructure.
+            // Por ora, mantendo aqui para não quebrar. (Se mover, remova a linha abaixo e registre na Infrastructure.)
+            services.AddSingleton<ITokenService, TokenService>();
+
+            // USE CASES (escopo por requisição)
+            services.AddScoped<LoginUseCase>();
+
+            // Produtos
             services.AddScoped<ListarProdutosUseCase>();
             services.AddScoped<ObterProdutoPorIdUseCase>();
+            services.AddScoped<CriarProdutoUseCase>();
+            services.AddScoped<AtualizarProdutoUseCase>();
             services.AddScoped<RemoverProdutoUseCase>();
 
-            // UseCases - Estoque
+            // Estoque
             services.AddScoped<RegistrarEntradaEstoqueUseCase>();
             services.AddScoped<ConsultarSaldoProdutoUseCase>();
 
-            // UseCases - Pedidos
+            // Pedidos
             services.AddScoped<CriarPedidoComItensUseCase>();
-            services.AddScoped<ObterPedidoPorIdUseCase>();
             services.AddScoped<ConfirmarPedidoUseCase>();
+            services.AddScoped<ObterPedidoPorIdUseCase>();
 
-            // UseCases - Usuarios
+            // Usuários
+            services.AddScoped<ListarUsuariosUseCase>();
+            services.AddScoped<ObterUsuarioPorIdUseCase>();
             services.AddScoped<CriarUsuarioUseCase>();
             services.AddScoped<AtualizarUsuarioUseCase>();
             services.AddScoped<ExcluirUsuarioUseCase>();
-            services.AddScoped<ObterUsuarioPorIdUseCase>();
-            services.AddScoped<ListarUsuariosUseCase>();
-
-            // Controllers + FluentValidation
-            services.AddControllers();
-
-            services.AddFluentValidationAutoValidation();
-
-            // Registro dos validators (quantos precisar)
-            services.AddValidatorsFromAssemblyContaining<CreateProdutoRequestValidator>();
-            services.AddValidatorsFromAssemblyContaining<CreateEntradaEstoqueRequestValidator>();
-            services.AddValidatorsFromAssemblyContaining<CreateUsuarioRequestValidator>();
-            services.AddValidatorsFromAssemblyContaining<CreatePedidoRequestValidator>();
-
-            // Swagger
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-
-            // Token + Login
-            services.AddSingleton<ITokenService, TokenService>();
-            services.AddScoped<LoginUseCase>();
 
             return services;
-        }
-
-        // Pipeline da aplicação (Swagger, HTTPS, Auth, Controllers)
-        public static WebApplication UseSportsStore(this WebApplication app)
-        {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseMiddleware<ExceptionMiddleware>();
-            app.UseAuthorization();
-            app.MapControllers();
-
-            return app;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace StoreService.Application.Pedidos.DTOs
         public int Codigo { get; set; }
         public string ClienteDocumento { get; set; } = "";
         public string VendedorNome { get; set; } = "";
+        public Guid? VendedorId { get; set; }
         public decimal ValorTotal { get; set; }
         public StatusPedido Status { get; set; }
         public DateTime CriadoEm { get; set; }
@@ -17,6 +18,7 @@ namespace StoreService.Application.Pedidos.DTOs
 
     public class PedidoItemResponse
     {
+        public Guid Id { get; set; }
         public Guid ProdutoId { get; set; }
         public int ProdutoCodigo { get; set; }
         public int Quantidade { get; set; }
