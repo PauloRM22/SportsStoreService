@@ -123,7 +123,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
   "senha": "123456"
 }
 ```
-
+Use o token no botão **Authorize** do Swagger (Bearer).
 ---
 
 ### 6) Criar Pedido (Vendedor)
@@ -131,6 +131,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 ```json
 {
   "clienteDocumento": "123.456.789-00",
+  "vendedorNome": "Carlos",
   "itens": [
     {
       "produtoId": "<ID do produto>",
