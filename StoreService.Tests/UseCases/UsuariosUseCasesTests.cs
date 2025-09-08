@@ -10,7 +10,7 @@ using Xunit;
 
 namespace StoreService.Tests.UseCases;
 
-public class Usuarios
+public class UsuariosUseCasesTests
 {
     [Fact]
     public async Task CriarUsuario_Email_ja_existe_deve_lancar()

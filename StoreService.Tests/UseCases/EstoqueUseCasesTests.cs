@@ -8,7 +8,7 @@ using Xunit;
 
 namespace StoreService.Tests.UseCases;
 
-public class Estoque
+public class EstoqueUseCasesTests
 {
     [Fact]
     public async Task RegistrarEntrada_Deve_chamar_repo_e_mapear()

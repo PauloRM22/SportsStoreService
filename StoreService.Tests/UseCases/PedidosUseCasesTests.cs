@@ -8,7 +8,7 @@ using Xunit;
 
 namespace StoreService.Tests.UseCases;
 
-public class Pedidos
+public class PedidosUseCasesTests
 {
     [Fact]
     public async Task CriarPedidoComItens_Request_nulo_deve_lancar()

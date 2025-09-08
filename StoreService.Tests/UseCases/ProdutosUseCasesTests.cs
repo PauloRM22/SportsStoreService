@@ -8,7 +8,7 @@ using Xunit;
 
 namespace StoreService.Tests.UseCases;
 
-public class Produtos
+public class ProdutosUseCasesTests
 {
     [Fact]
     public async Task CriarProduto_Input_nulo_deve_lancar()
