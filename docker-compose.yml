@@ -1,0 +1,31 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sportstore_sql
+    environment:
+      - SA_PASSWORD=123Strong!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  api:
+    build:
+      context: .
+      dockerfile: SportsStoreService/Dockerfile
+    container_name: sportstore_api
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Server=sqlserver,1433;Database=SportsStoreDb;User Id=sa;Password=123Strong!;TrustServerCertificate=True;
+      - Jwt__Key=4f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff
+      - Jwt__Issuer=SportsStore
+      - Jwt__Audience=SportsStoreClients
+      - App__ApplyMigrations=true
+    ports:
+      - "8080:8080"
+
+volumes:
+  sql_data:

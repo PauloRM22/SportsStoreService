@@ -42,8 +42,7 @@ namespace SportsStoreService
             // 8) Endpoints
             app.MapControllers();
 
-            // (Opcional) Atalho para abrir o Swagger na raiz.
-            // app.MapGet("/", () => Results.Redirect("/swagger"));
+            app.UseDatabaseMigrations();
 
             app.Run();
         }
