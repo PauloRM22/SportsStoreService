@@ -18,6 +18,7 @@ services:
     depends_on:
       - sqlserver
       - rabbitmq
+      - datadog
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Default=Server=sqlserver,1433;Database=SportsStoreDb;User Id=sa;Password=123Strong!;TrustServerCertificate=True;
@@ -28,18 +29,35 @@ services:
       - Rabbit__Host=rabbitmq
       - Rabbit__User=app
       - Rabbit__Pass=app
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=Development
     ports:
-      - "8080:8080"      
+      - "8080:8080"
 
   rabbitmq:
     image: rabbitmq:3.13-management
     container_name: sportstore_rabbit
     environment:
-        - RABBITMQ_DEFAULT_USER=app
-        - RABBITMQ_DEFAULT_PASS=app
+      - RABBITMQ_DEFAULT_USER=app
+      - RABBITMQ_DEFAULT_PASS=app
     ports:
-        - "5672:5672"
-        - "15672:15672"
+      - "5672:5672"
+      - "15672:15672"
+
+  datadog:
+    image: gcr.io/datadoghq/agent:7
+    container_name: sportstore_datadog
+    environment:
+      - DD_API_KEY=30c547f6f51759fd6204957087008b6b
+      - DD_SITE=datadoghq.com
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=false
+      - DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC=1
+      - DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP=1
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   sql_data:

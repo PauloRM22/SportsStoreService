@@ -15,7 +15,10 @@ namespace SportsStoreService
             builder.Services.AddSportsStore(builder.Configuration);
 
             // 2) Infraestrutura (DbContext + Repositórios)
-            builder.Services.AddInfrastructure(builder.Configuration);            
+            builder.Services.AddInfrastructure(builder.Configuration);
+
+            // 3) Observability (OTel → Datadog via OTLP)
+            builder.Services.AddObservability(builder.Configuration, builder.Environment);
 
             // 4) Swagger + JWT (esquema de segurança e auth)
             builder.Services.AddSwaggerWithJwt();
