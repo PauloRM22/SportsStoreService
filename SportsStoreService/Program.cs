@@ -1,4 +1,5 @@
-﻿using SportsStoreService.Extensions;                   // AddSportsStore, AddSwaggerWithJwt, AddJwtAuth
+﻿using MassTransit;
+using SportsStoreService.Extensions;                   // AddSportsStore, AddSwaggerWithJwt, AddJwtAuth
 using SportsStoreService.Middlewares;
 using StoreService.Infrastructure.DependencyInjection;                  // ExceptionMiddleware  (ajuste se o namespace for outro)
 
@@ -14,7 +15,7 @@ namespace SportsStoreService
             builder.Services.AddSportsStore(builder.Configuration);
 
             // 2) Infraestrutura (DbContext + Repositórios)
-            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddInfrastructure(builder.Configuration);            
 
             // 4) Swagger + JWT (esquema de segurança e auth)
             builder.Services.AddSwaggerWithJwt();

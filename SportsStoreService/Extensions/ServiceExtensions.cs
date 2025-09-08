@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
+using SportsStoreService.Messaging.Consumers;
 
 // Application (DTOs/UseCases/Validators/Segurança)
 using StoreService.Application.Auth.UseCases;
@@ -8,7 +10,6 @@ using StoreService.Application.Pedidos.UseCases;
 using StoreService.Application.Produtos.UseCases;
 using StoreService.Application.Security;
 using StoreService.Application.Usuarios.UseCases;
-
 
 // Ponto de ancoragem para varredura de validators (qualquer classe da Application)
 using StoreService.Application.Validations.Produtos;
@@ -30,6 +31,29 @@ namespace SportsStoreService.Extensions
                     o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
                 });
             services.AddFluentValidationAutoValidation();
+
+            //RabbitMQ
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<PedidoConfirmadoConsumer>();
+
+                x.UsingRabbitMq((ctx, cfg) =>
+                {
+                    var host = configuration["Rabbit:Host"] ?? "rabbitmq";
+                    cfg.Host(host, "/", h =>
+                    {
+                        var user = configuration["Rabbit:User"] ?? "app";
+                        var pass = configuration["Rabbit:Pass"] ?? "app";
+                        h.Username(user);
+                        h.Password(pass);
+                    });
+
+                    cfg.ReceiveEndpoint("notifier-pedido-confirmado", e =>
+                    {
+                        e.ConfigureConsumer<PedidoConfirmadoConsumer>(ctx);
+                    });
+                });
+            });
 
             // Varredura de VALIDATORS na ASSEMBLY da Application
             services.AddValidatorsFromAssembly(typeof(CreateProdutoRequestValidator).Assembly);

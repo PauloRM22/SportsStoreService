@@ -15,6 +15,8 @@ using StoreService.Application.Security;
 using StoreService.Infrastructure.Security;
 using StoreService.Application.Produtos.Interfaces;
 using StoreService.Application.Usuarios.Interfaces;
+using StoreService.Application.Messaging;
+using StoreService.Infrastructure.Messaging;
 
 namespace StoreService.Infrastructure.DependencyInjection
 {
@@ -25,6 +27,8 @@ namespace StoreService.Infrastructure.DependencyInjection
             // DbContext (SQL Server)
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));
+
+            services.AddScoped<IEventPublisher, MassTransitEventPublisher>();
 
             // JWT
             services.Configure<JwtOptions>(configuration.GetSection("Jwt"));

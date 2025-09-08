@@ -17,6 +17,7 @@ services:
     container_name: sportstore_api
     depends_on:
       - sqlserver
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Default=Server=sqlserver,1433;Database=SportsStoreDb;User Id=sa;Password=123Strong!;TrustServerCertificate=True;
@@ -24,8 +25,21 @@ services:
       - Jwt__Issuer=SportsStore
       - Jwt__Audience=SportsStoreClients
       - App__ApplyMigrations=true
+      - Rabbit__Host=rabbitmq
+      - Rabbit__User=app
+      - Rabbit__Pass=app
     ports:
-      - "8080:8080"
+      - "8080:8080"      
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: sportstore_rabbit
+    environment:
+        - RABBITMQ_DEFAULT_USER=app
+        - RABBITMQ_DEFAULT_PASS=app
+    ports:
+        - "5672:5672"
+        - "15672:15672"
 
 volumes:
   sql_data:
