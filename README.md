@@ -51,7 +51,7 @@ docker compose up -d --build
 ## 🧭 Roteiro E2E para QA (copiar e colar os JSONs)
 
 ### 0) Bootstrap do Admin (somente se ainda não existir usuário)
-`POST /api/Usuario/bootstrap` *(AllowAnonymous em Development; bloqueia após existir usuário)*  
+`POST /api/usuarios/bootstrap` *(AllowAnonymous em Development; bloqueia após existir usuário)*  
 ```json
 {
   "nome": "Administrador",
@@ -61,7 +61,7 @@ docker compose up -d --build
 }
 ```
 
-> Depois do primeiro usuário, novas criações são via `POST /api/Usuario` **com Admin autenticado**.
+> Depois do primeiro usuário, novas criações são via `POST /api/usuarios` **com Admin autenticado**.
 
 ---
 
@@ -78,7 +78,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 ---
 
 ### 2) Criar Produto (Admin)
-`POST /api/Produto`
+`POST /api/produtos`
 ```json
 {
   "nome": "Bola Oficial",
@@ -90,7 +90,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 ---
 
 ### 3) Entrada de Estoque (Admin)
-`POST /api/Estoque/entradas`
+`POST /api/estoque/entrada`
 ```json
 {
   "produtoId": "<ID do produto>",
@@ -103,7 +103,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 ---
 
 ### 4) Criar Vendedor (Admin)
-`POST /api/Usuario`
+`POST /api/usuarios`
 ```json
 {
   "nome": "João Vendedor",
@@ -123,14 +123,15 @@ Use o token no botão **Authorize** do Swagger (Bearer).
   "senha": "123456"
 }
 ```
-
+Use o token no botão **Authorize** do Swagger (Bearer).
 ---
 
 ### 6) Criar Pedido (Vendedor)
-`POST /api/Pedido`
+`POST /api/pedidos`
 ```json
 {
   "clienteDocumento": "123.456.789-00",
+  "vendedorNome": "Carlos",
   "itens": [
     {
       "produtoId": "<ID do produto>",
@@ -143,10 +144,15 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 ---
 
 ### 7) Confirmar Pedido (Vendedor) — baixa de estoque
-`PATCH /api/Pedido/{id}/confirmar`  
+`POST /api/pedidos/{id}/confirmar`  
 **Resultado esperado**:
 - **200** → pedido confirmado e **estoque baixado**
 - **422** → **estoque insuficiente** (mensagem de validação clara)
+
+> ⚠️ **Nota sobre H5 (Pedidos):**  
+> O enunciado original sugere que o pedido não deve ser criado se não houver estoque.  
+> Nesta implementação, o pedido é salvo primeiro como **rascunho**, e a checagem de estoque ocorre na **confirmação**. Assim garantimos que não haja baixa incorreta e ainda permitimos ao vendedor registrar pedidos preliminares.  
+> Decidimos que **a efetivação (baixa de estoque)** só acontece na confirmação, garantindo consistência e robustez em cenários concorrentes.
 
 ---
 
@@ -184,7 +190,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
    ```yaml
    datadog:
      environment:
-       - DD_API_KEY=sua_chave_aqui
+       - DD_API_KEY=${DD_API_KEY}
        - DD_SITE=datadoghq.com
        - DD_APM_ENABLED=true
        - DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC=1
@@ -204,7 +210,7 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 ## ✅ Histórias de Usuário atendidas
 **H1 – Cadastro de Usuários**  
 - Criar, editar, listar, consultar, excluir; perfis **Administrador** e **Vendedor**; e-mail **único**; senha min. **6**.  
-- **Bootstrap** do primeiro Admin em Development: `POST /api/Usuario/bootstrap`.
+- **Bootstrap** do primeiro Admin em Development: `POST /api/usuarios/bootstrap`.
 
 **H2 – Login**  
 - Via e-mail/senha; retorna **token JWT**.
@@ -219,7 +225,8 @@ Use o token no botão **Authorize** do Swagger (Bearer).
 **H5 – Emissão de Pedidos**  
 - Criar **rascunho** com itens e documento do cliente.  
 - **Confirmar**: baixa de estoque.  
-- Se faltar estoque → **não confirma** (erro 422 com mensagem).
+- Se faltar estoque → **não confirma** (erro 422 com mensagem).  
+- **Decisão técnica**: não bloquear na criação (rascunho), somente na confirmação.
 
 **Diferenciais (Bônus)**  
 - **RabbitMQ/MassTransit** (publish/consume de `PedidoConfirmadoEvent`).  
