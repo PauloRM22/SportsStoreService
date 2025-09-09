@@ -1,6 +1,5 @@
-﻿using System.Net;
-using StoreService.IntegrationTests.Setup;
-using Xunit;
+﻿using StoreService.IntegrationTests.Setup;
+using System.Net;
 
 namespace StoreService.IntegrationTests.Controllers;
 

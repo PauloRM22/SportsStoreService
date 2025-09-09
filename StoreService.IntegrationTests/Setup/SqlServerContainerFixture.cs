@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using DotNet.Testcontainers.Builders;
 using Testcontainers.MsSql;
-using DotNet.Testcontainers.Builders;
-using Xunit;
 
 namespace StoreService.IntegrationTests.Setup;
 

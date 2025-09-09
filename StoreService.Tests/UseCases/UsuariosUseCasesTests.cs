@@ -6,7 +6,6 @@ using StoreService.Application.Usuarios.Interfaces;
 using StoreService.Application.Usuarios.UseCases;
 using StoreService.Domain.Entities;
 using StoreService.Domain.Enums;
-using Xunit;
 
 namespace StoreService.Tests.UseCases;
 
@@ -66,9 +65,8 @@ public class UsuariosUseCasesTests
         // Verificações sobre o objeto persistido:
         salvo.Should().NotBeNull();
         salvo!.Email.Should().Be("admin@dominio.com");
-        salvo.SenhaHash.Should().BeEquivalentTo(expectedHash); // byte[] => BeEquivalentTo
+        salvo.SenhaHash.Should().BeEquivalentTo(expectedHash);
 
-        // E o retorno do use case:
         resp.Email.Should().Be("admin@dominio.com");
     }
 }

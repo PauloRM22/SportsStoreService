@@ -5,10 +5,6 @@ namespace SportsStoreService.Extensions;
 
 public static class DatabaseExtensions
 {
-    /// <summary>
-    /// Aplica migrações do EF Core se estiver rodando no container (ou se App:ApplyMigrations=true).
-    /// Inclui retry simples para esperar o SQL Server ficar pronto.
-    /// </summary>
     public static void UseDatabaseMigrations(this IApplicationBuilder app)
     {
         var cfg = app.ApplicationServices.GetRequiredService<IConfiguration>();
@@ -16,7 +12,6 @@ public static class DatabaseExtensions
                         .GetRequiredService<ILoggerFactory>()
                         .CreateLogger("DatabaseMigrations");
 
-        // Regra: roda em Docker OU quando App:ApplyMigrations=true
         var inDocker = string.Equals(
             Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), "true",
             StringComparison.OrdinalIgnoreCase);
@@ -39,7 +34,7 @@ public static class DatabaseExtensions
         {
             try
             {
-                db.Database.Migrate(); // idempotente
+                db.Database.Migrate();
                 logger.LogInformation("EF migrations applied successfully.");
                 return;
             }
@@ -52,7 +47,6 @@ public static class DatabaseExtensions
             }
         }
 
-        // última tentativa: se der erro, deixa estourar (fail fast)
         db.Database.Migrate();
     }
 }

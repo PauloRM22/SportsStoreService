@@ -12,7 +12,6 @@ namespace StoreService.Infrastructure.Data.Repositories
 
         public async Task<Pedido> CriarComItensAsync(Pedido pedido, List<PedidoItem> itens, CancellationToken ct)
         {
-            // Carrega preços atuais e valida produtos
             var produtoIds = itens.Select(i => i.ProdutoId).Distinct().ToList();
             var produtos = await _db.Produtos.Where(p => produtoIds.Contains(p.Id)).ToListAsync(ct);
             if (produtos.Count != produtoIds.Count)
@@ -53,7 +52,6 @@ namespace StoreService.Infrastructure.Data.Repositories
             if (pedido.Status != StatusPedido.Rascunho)
                 throw new ArgumentException("Somente pedidos em rascunho podem ser confirmados.");
 
-            // Valida saldos antes
             var produtoIds = pedido.Itens.Select(i => i.ProdutoId).Distinct().ToList();
             var saldos = await _db.ProdutosSaldo
                 .Where(s => produtoIds.Contains(s.ProdutoId))
@@ -65,14 +63,12 @@ namespace StoreService.Infrastructure.Data.Repositories
                 var disponivel = saldo?.QuantidadeAtual ?? 0;
                 if (disponivel < item.Quantidade)
                 {
-                    // recupera codigo do produto pra msg amigável
                     var prod = await _db.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.Id == item.ProdutoId, ct);
                     var codigo = prod?.Codigo ?? 0;
                     throw new ArgumentException($"Estoque insuficiente para o produto {codigo}.");
                 }
             }
 
-            // Debita estoque e cria movimentações
             foreach (var item in pedido.Itens)
             {
                 var saldo = await _db.ProdutosSaldo.FirstOrDefaultAsync(s => s.ProdutoId == item.ProdutoId, ct);
@@ -98,16 +94,13 @@ namespace StoreService.Infrastructure.Data.Repositories
                 });
             }
 
-            // Atualiza pedido
             pedido.ValorTotal = pedido.Itens.Sum(i => i.Quantidade * i.PrecoUnitario);
             pedido.Status = StatusPedido.Confirmado;
             pedido.AtualizadoEm = DateTime.UtcNow;
 
-            // IMPORTANTE: não usar Update(pedido) para não sujar Codigo (IDENTITY)
             await _db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
 
-            // Retorna com Produto incluido
             return await ObterComItensAsync(pedido.Id, ct) ?? pedido;
         }
     }

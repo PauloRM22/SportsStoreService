@@ -5,7 +5,7 @@ using StoreService.Application.Security;
 using StoreService.Infrastructure.Security;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json; // <- para serializar o JSON de erro
+using System.Text.Json;
 
 namespace SportsStoreService.Extensions
 {
@@ -45,7 +45,6 @@ namespace SportsStoreService.Extensions
                         RoleClaimType = ClaimTypes.Role
                     };
 
-                    // 👇 respostas JSON padronizadas
                     options.Events = new JwtBearerEvents
                     {
                         OnChallenge = context =>

@@ -17,7 +17,6 @@ namespace StoreService.Application.Produtos.UseCases
             if (string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("Nome é obrigatório.", nameof(input.Nome));
 
-            // 🔎 Regra de unicidade (checa antes de persistir)
             if (await _repo.ExistsByNomeAsync(nome, ct))
                 throw new ArgumentException($"Já existe um produto com o nome '{nome}'.");
 

@@ -39,7 +39,7 @@ namespace StoreService.Application.Pedidos.UseCases
             Id = p.Id,
             Codigo = p.Codigo,
             ClienteDocumento = p.ClienteDocumento,
-            VendedorId = p.VendedorId,          // ✅ vai casar com Guid? no DTO
+            VendedorId = p.VendedorId,
             VendedorNome = p.VendedorNome,
             ValorTotal = p.ValorTotal,
             Status = p.Status,
@@ -49,10 +49,10 @@ namespace StoreService.Application.Pedidos.UseCases
             {
                 Id = i.Id,
                 ProdutoId = i.ProdutoId,
-                ProdutoCodigo = i.Produto?.Codigo ?? 0,    // ✅ vem do Include feito no repo
+                ProdutoCodigo = i.Produto?.Codigo ?? 0,
                 Quantidade = i.Quantidade,
                 PrecoUnitario = i.PrecoUnitario,
-                Subtotal = i.Quantidade * i.PrecoUnitario  // ✅
+                Subtotal = i.Quantidade * i.PrecoUnitario
             }).ToList()
         };
     }

@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using StoreService.Application.Pedidos.DTOs;
-using System.Linq;
 
 namespace StoreService.Application.Validations.Pedidos
-{ 
+{
     public class CreatePedidoRequestValidator : AbstractValidator<CreatePedidoRequest>
     {
         public CreatePedidoRequestValidator()
@@ -17,7 +16,6 @@ namespace StoreService.Application.Validations.Pedidos
             RuleFor(x => x.VendedorNome)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Nome do vendedor é obrigatório.")
-                // aplica limite considerando Trim
                 .Must(v => (v ?? string.Empty).Trim().Length <= 120)
                     .WithMessage("Nome do vendedor deve ter no máximo 120 caracteres.");
 

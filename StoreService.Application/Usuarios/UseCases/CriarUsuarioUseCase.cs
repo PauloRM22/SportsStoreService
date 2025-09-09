@@ -31,7 +31,7 @@ namespace StoreService.Application.Usuarios.UseCases
                 Nome = req.Nome.Trim(),
                 Email = email,
                 TipoUsuario = req.TipoUsuario,
-                SenhaHash = _hasher.Hash(senha), // hash só depois de validar
+                SenhaHash = _hasher.Hash(senha),
                 CriadoEm = DateTime.UtcNow
             };
 

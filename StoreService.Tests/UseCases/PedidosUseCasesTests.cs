@@ -4,7 +4,6 @@ using StoreService.Application.Pedidos.DTOs;
 using StoreService.Application.Pedidos.Interfaces;
 using StoreService.Application.Pedidos.UseCases;
 using StoreService.Domain.Entities;
-using Xunit;
 
 namespace StoreService.Tests.UseCases;
 

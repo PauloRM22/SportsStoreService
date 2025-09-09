@@ -4,7 +4,6 @@ using StoreService.Application.Produtos.DTOs;
 using StoreService.Application.Produtos.Interfaces;
 using StoreService.Application.Produtos.UseCases;
 using StoreService.Domain.Entities;
-using Xunit;
 
 namespace StoreService.Tests.UseCases;
 

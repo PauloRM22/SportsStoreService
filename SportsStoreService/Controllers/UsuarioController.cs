@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using StoreService.Application.Usuarios.DTOs;
 using StoreService.Application.Usuarios.UseCases;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SportsStoreService.Controllers
 {
     [ApiController]
-    [Route("api/usuarios")]                // 🔹 plural, minúsculo
+    [Route("api/usuarios")]
     [Authorize(Policy = "AdminOnly")]
     public class UsuariosController : ControllerBase
     {

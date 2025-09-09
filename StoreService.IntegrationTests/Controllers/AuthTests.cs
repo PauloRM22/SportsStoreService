@@ -1,7 +1,6 @@
-﻿using System.Net;
+﻿using StoreService.IntegrationTests.Setup;
+using System.Net;
 using System.Net.Http.Json;
-using StoreService.IntegrationTests.Setup;
-using Xunit;
 
 namespace StoreService.IntegrationTests.Controllers;
 

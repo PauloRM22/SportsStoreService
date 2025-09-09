@@ -2,7 +2,6 @@
 using StoreService.Application.Usuarios.DTOs;
 using StoreService.Application.Validations.Usuarios;
 using StoreService.Domain.Enums;
-using Xunit;
 
 namespace StoreService.Tests.Validators;
 
@@ -18,7 +17,6 @@ public class UsuariosValidatorsTests
         TipoUsuario = TipoUsuario.Administrador
     };
 
-    // NOME
     [Fact]
     public void Nome_nao_pode_ser_vazio()
     {
@@ -57,7 +55,6 @@ public class UsuariosValidatorsTests
         result.ShouldNotHaveValidationErrorFor(x => x.Nome);
     }
 
-    // EMAIL
     [Fact]
     public void Email_nao_pode_ser_vazio()
     {
@@ -91,7 +88,6 @@ public class UsuariosValidatorsTests
         result.ShouldNotHaveValidationErrorFor(x => x.Email);
     }
 
-    // SENHA
     [Fact]
     public void Senha_nao_pode_ser_vazia()
     {
@@ -133,12 +129,11 @@ public class UsuariosValidatorsTests
         result.ShouldNotHaveValidationErrorFor(x => x.Senha);
     }
 
-    // TIPO USUÁRIO
     [Fact]
     public void TipoUsuario_invalido_deve_falhar()
     {
         var model = Valid();
-        model.TipoUsuario = (TipoUsuario)42; // fora do enum declarado
+        model.TipoUsuario = (TipoUsuario)42;
         var result = _validator.TestValidate(model);
         result.ShouldHaveValidationErrorFor(x => x.TipoUsuario)
               .WithErrorMessage("Tipo de usuário inválido. Use 'Administrador' ou 'Vendedor'.");

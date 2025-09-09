@@ -26,7 +26,7 @@ namespace SportsStoreService
 
             var app = builder.Build();
 
-            // 5) Swagger só em Development (mantenho seu comportamento atual)
+            // 5) Swagger só em Development
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -34,7 +34,6 @@ namespace SportsStoreService
             }
 
             // 6) Middleware global de exceções (ProblemDetails)
-            //    Coloque ANTES de Authentication/Authorization para capturar tudo
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();

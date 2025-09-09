@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using StoreService.Application.Pedidos.DTOs;
 using StoreService.Application.Pedidos.UseCases;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace SportsStoreService.Controllers
@@ -38,7 +38,7 @@ namespace SportsStoreService.Controllers
 
             try
             {
-                var resp = await useCase.ExecuteAsync(request, vendedorId, ct);  // ✅ passa o vendedorId
+                var resp = await useCase.ExecuteAsync(request, vendedorId, ct);
                 return CreatedAtAction(nameof(GetById), new { id = resp.Id }, resp);
             }
             catch (ArgumentException ex)

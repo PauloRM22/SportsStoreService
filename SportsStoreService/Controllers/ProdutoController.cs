@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using StoreService.Application.Produtos.UseCases;
 using StoreService.Application.Produtos.DTOs;
+using StoreService.Application.Produtos.UseCases;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SportsStoreService.Controllers
 {

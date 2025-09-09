@@ -19,7 +19,6 @@ namespace StoreService.Application.Produtos.UseCases
             if (string.IsNullOrWhiteSpace(novoNome))
                 throw new ArgumentException("Nome é obrigatório.", nameof(input.Nome));
 
-            // Só checa duplicidade se o nome foi alterado
             if (!string.Equals(entity.Nome, novoNome, StringComparison.Ordinal))
             {
                 if (await _repo.ExistsByNomeAsync(novoNome, ct))

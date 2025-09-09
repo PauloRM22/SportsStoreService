@@ -1,18 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using OpenTelemetry.Resources;
+﻿using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace SportsStoreService.Extensions
 {
     public static class OpenTelemetryExtensions
     {
-        /// <summary>
-        /// Registra OpenTelemetry Tracing com export via OTLP (Datadog).
-        /// Valores padrão podem ser sobrescritos por config/env:
-        /// OTel:ServiceName, OTel:ServiceVersion, OTel:Exporter:OtlpEndpoint
-        /// </summary>
         public static IServiceCollection AddObservability(
             this IServiceCollection services,
             IConfiguration configuration,

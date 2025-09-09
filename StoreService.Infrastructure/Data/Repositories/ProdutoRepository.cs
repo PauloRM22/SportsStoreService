@@ -24,7 +24,6 @@ namespace StoreService.Infrastructure.Data.Repositories
 
         public async Task UpdateAsync(Produto entity, CancellationToken ct)
         {
-            // Anexa e marca apenas os campos que podem mudar.
             _db.Attach(entity);
 
             var entry = _db.Entry(entity);
@@ -33,9 +32,6 @@ namespace StoreService.Infrastructure.Data.Repositories
             entry.Property(p => p.Preco).IsModified = true;
             entry.Property(p => p.Ativo).IsModified = true;
             entry.Property(p => p.AtualizadoEm).IsModified = true;
-
-            // NUNCA mexer em Identity/Keys:
-            // entry.Property(p => p.Codigo).IsModified = false; // (desnecessário, só pra reforçar)
 
             await _db.SaveChangesAsync(ct);
         }
@@ -49,9 +45,6 @@ namespace StoreService.Infrastructure.Data.Repositories
             await _db.SaveChangesAsync(ct);
         }
 
-        /// <summary>
-        /// Verifica se já existe um produto com o mesmo nome.
-        /// </summary>
         public async Task<bool> ExistsByNomeAsync(string nome, CancellationToken ct)
         {
             return await _db.Produtos.AnyAsync(p => p.Nome == nome, ct);

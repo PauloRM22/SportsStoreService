@@ -19,10 +19,8 @@ namespace SportsStoreService.Extensions
                     Description = "API da Sports Store — usuários, produtos, estoque e pedidos."
                 });
 
-                // habilita [SwaggerOperation] etc.
                 c.EnableAnnotations();
 
-                // 🆕 ordena ações pelo OperationId (que vamos setar nos métodos)
                 c.OrderActionsBy(apiDesc =>
                 {
                     apiDesc.TryGetMethodInfo(out var mi);
@@ -30,10 +28,8 @@ namespace SportsStoreService.Extensions
                     return attr?.OperationId ?? $"{apiDesc.GroupName}_{apiDesc.HttpMethod}_{apiDesc.RelativePath}";
                 });
 
-                // coloca tags “amigáveis” nos grupos (Auth → Autenticação, etc.)
                 c.OperationFilter<FriendlyTagsOperationFilter>();
 
-                // define a ordem e descrição dos grupos (tags) — Autenticação em 1º
                 c.DocumentFilter<TagDescriptionsDocumentFilter>();
 
                 // JWT Bearer
@@ -59,7 +55,6 @@ namespace SportsStoreService.Extensions
         }
     }
 
-    // Mapeia nomes de controllers para tags “bonitas”
     internal sealed class FriendlyTagsOperationFilter : IOperationFilter
     {
         private static readonly Dictionary<string, string> Map = new(StringComparer.OrdinalIgnoreCase)
@@ -85,7 +80,6 @@ namespace SportsStoreService.Extensions
         }
     }
 
-    // Define a ORDEM e a DESCRIÇÃO dos grupos (tags) no topo do Swagger
     internal sealed class TagDescriptionsDocumentFilter : IDocumentFilter
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)

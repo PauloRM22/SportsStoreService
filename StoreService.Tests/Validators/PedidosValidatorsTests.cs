@@ -1,9 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using StoreService.Application.Pedidos.DTOs;
 using StoreService.Application.Validations.Pedidos;
-using Xunit;
-
-// alias conforme seu DTO real de item:
 using PedidoItem = StoreService.Application.Pedidos.DTOs.PedidoItemRequest;
 
 namespace StoreService.Tests.Validators;
@@ -54,7 +51,7 @@ public class PedidosValidatorsTests
         var r = _validator.TestValidate(m);
 
         // Aqui TEM que haver erro (é um cenário inválido):
-        Assert.False(r.IsValid); // <- mantém essa linha
+        Assert.False(r.IsValid);
 
         r.ShouldHaveValidationErrorFor("Itens[0].ProdutoId");
         r.ShouldHaveValidationErrorFor("Itens[1].Quantidade");

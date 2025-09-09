@@ -4,7 +4,6 @@ using StoreService.Application.Estoque.DTOs;
 using StoreService.Application.Estoque.Interfaces;
 using StoreService.Application.Estoque.UseCases;
 using StoreService.Domain.Entities;
-using Xunit;
 
 namespace StoreService.Tests.UseCases;
 

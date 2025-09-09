@@ -2,16 +2,12 @@
 using FluentValidation.AspNetCore;
 using MassTransit;
 using SportsStoreService.Messaging.Consumers;
-
-// Application (DTOs/UseCases/Validators/Segurança)
 using StoreService.Application.Auth.UseCases;
 using StoreService.Application.Estoque.UseCases;
 using StoreService.Application.Pedidos.UseCases;
 using StoreService.Application.Produtos.UseCases;
 using StoreService.Application.Security;
 using StoreService.Application.Usuarios.UseCases;
-
-// Ponto de ancoragem para varredura de validators (qualquer classe da Application)
 using StoreService.Application.Validations.Produtos;
 using StoreService.Infrastructure.Security;
 using System.Text.Json.Serialization;

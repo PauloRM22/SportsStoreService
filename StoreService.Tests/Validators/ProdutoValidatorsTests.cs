@@ -1,7 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using StoreService.Application.Produtos.DTOs;
 using StoreService.Application.Validations.Produtos;
-using Xunit;
 
 namespace StoreService.Tests.Validators;
 
@@ -25,7 +24,6 @@ public class ProdutoValidatorsTests
         Preco = 199.90m
     };
 
-    // CREATE
     [Fact]
     public void Create_Nome_obrigatorio()
     {
@@ -53,7 +51,6 @@ public class ProdutoValidatorsTests
         _create.TestValidate(ValidCreate()).ShouldNotHaveAnyValidationErrors();
     }
 
-    // UPDATE
     [Fact]
     public void Update_Id_obrigatorio()
     {

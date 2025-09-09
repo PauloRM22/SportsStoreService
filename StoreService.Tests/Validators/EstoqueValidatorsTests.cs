@@ -1,7 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using StoreService.Application.Estoque.DTOs;
 using StoreService.Application.Validations.Estoque;
-using Xunit;
 
 namespace StoreService.Tests.Validators;
 

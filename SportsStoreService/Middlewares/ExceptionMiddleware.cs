@@ -66,7 +66,7 @@ namespace SportsStoreService.Middlewares
                     vpd.Extensions["traceId"] = traceId;
                     return (vpd, StatusCodes.Status400BadRequest);
 
-                // 404 - Not Found (pode usar sua NotFoundException customizada, se tiver)
+                // 404 - Not Found
                 case KeyNotFoundException:
                 case { } e when e.GetType().Name == "NotFoundException":
                     var notFound = factory.CreateProblemDetails(
@@ -92,7 +92,7 @@ namespace SportsStoreService.Middlewares
                     conflict.Extensions["traceId"] = traceId;
                     return (conflict, StatusCodes.Status409Conflict);
 
-                // 401 - Unauthorized (se quiser manter)
+                // 401 - Unauthorized
                 case UnauthorizedAccessException:
                     var unauthorized = factory.CreateProblemDetails(
                         ctx,

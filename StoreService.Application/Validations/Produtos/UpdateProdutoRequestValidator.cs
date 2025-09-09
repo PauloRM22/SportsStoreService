@@ -15,7 +15,7 @@ namespace StoreService.Application.Validations.Produtos
                 .NotEmpty().WithMessage("Nome é obrigatório.")
                 .Must(s => !string.IsNullOrWhiteSpace(s))
                     .WithMessage("Nome é obrigatório.")
-                .MaximumLength(150); // alinhado com EF
+                .MaximumLength(150);
 
             RuleFor(x => x.Descricao)
                 .MaximumLength(1000);
@@ -23,7 +23,6 @@ namespace StoreService.Application.Validations.Produtos
             RuleFor(x => x.Preco)
                 .NotNull().WithMessage("Preço é obrigatório.")
                 .GreaterThan(0).WithMessage("Preço deve ser maior que zero.");
-            // se preferir permitir zero, use GreaterThanOrEqualTo(0)
         }
     }
 }

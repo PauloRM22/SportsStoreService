@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Threading;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.SqlClient;                // ADICIONE
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -77,7 +75,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 Thread.Sleep(1000);
             }
 
-            // ⚠️ NADA de EnsureDeleted() aqui!
             db.Database.Migrate();
         });
     }

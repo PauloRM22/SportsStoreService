@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Microsoft.Extensions.Logging;
 using StoreService.Application.Messaging.Events;
 
 namespace SportsStoreService.Messaging.Consumers

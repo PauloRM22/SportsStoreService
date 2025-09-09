@@ -10,8 +10,8 @@ namespace StoreService.Application.Security
 
     public class Pbkdf2PasswordHasher : IPasswordHasher
     {
-        private const int SaltSize = 16;   // 128 bits
-        private const int KeySize = 32;   // 256 bits
+        private const int SaltSize = 16;
+        private const int KeySize = 32;
         private const int Iterations = 100_000;
 
         public byte[] Hash(string password)
